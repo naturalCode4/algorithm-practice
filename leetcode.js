@@ -150,13 +150,13 @@ const spiralOrder = function(matrix) {
     while (a.length<m*n) {
         for (let x=xa; x<=xb; x++) {
             a.push(matrix[ya][x])
-            console.log(a,1)
+            // console.log(a,1)
         }
         
         ya++
         for (let y=ya; y<=yb; y++) {
             a.push(matrix[y][xb])
-            console.log(a,2)
+            // console.log(a,2)
 
         }
         
@@ -165,14 +165,14 @@ const spiralOrder = function(matrix) {
             
             for (let x=xb; x>=xa; x--) {
                 a.push(matrix[yb][x])
-                console.log(a,3)
-                console.log(xa,xb,ya,yb)
+                // console.log(a,3)
+                // console.log(xa,xb,ya,yb)
             }
 
             yb--
             for (let y=yb; y>=ya; y--) {
                 a.push(matrix[y][xa])
-                console.log(a,4)
+                // console.log(a,4)
             }
 
             xa++
@@ -181,22 +181,194 @@ const spiralOrder = function(matrix) {
     return a
 };
 
+console.log(spiralOrder([[1,2,3],[4,5,6],[7,8,9]]))
 
-// pseudocode:
+/* pseudocode:
 
-// xa is current left column
-// xb is current right column
-// ya is current top row
-// yb is current bottom
+xa is current left column
+xb is current right column
+ya is current top row
+yb is current bottom
 
-// execute top row
-// execute right column
-// execute bottom row reverse order
-// execute left column reverse order to second
+execute top row
+execute right column
+execute bottom row reverse order
+execute left column reverse order to second
 
-// execute top (second) row (up until second to last)
-// execute right column (from second until second to last)
-// execute bottom (second to bottom) row reverse order (from second to second to last)
-// execute (second to) left column reverse order to third item
+execute top (second) row (up until second to last)
+execute right column (from second until second to last)
+execute bottom (second to bottom) row reverse order (from second to second to last)
+execute (second to) left column reverse order to third item
 
-// let h = Math.Max(a,b)
+let h = Math.Max(a,b) */
+
+// Given an m x n grid of characters board and a string word, return true if word exists in the grid.
+// The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
+// Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+// Output: true
+
+////////////////////////
+
+// You are climbing a staircase. It takes n steps to reach the top.
+// Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+// Explanation of memoization: If we simply wrote a fibonacci recursion statement without memoization, then the code would calculate the fibonacci value at n-1 and n-2 each and every time we are calculating n (which each in turn, have to calculate THEIR n-1 and n-2). That's ridicilously inefficient. Could take a minute to calculate a 2 digit number like 60. Instead, with memoization, we have an object where we store the values that we find. So we only have to calculate the values once, and then can reference them simply in an object. This cuts the runtime by, like, 1000x aka "a lot".
+    // non-memoized non-dynamic dont do this. Will take 5 minutes:
+        // const climbStairs = n => {
+        //     if (n<=2) return n
+        //     return (climbStairs(n-1) + climbStairs(n-2))
+        // }
+
+let memo = {
+    0: 0,
+    1: 1,
+    2: 2,
+}
+
+const climbStairs = function(n) {
+    // base case
+        // if (n===0) return 0
+        // if (n===1) return 1
+        // if (n===2) return 2
+    if (n<=2) return n
+
+    //build memo
+    if (!memo[n]) {
+        memo[n] = climbStairs(n-1) + climbStairs(n-2)
+    } 
+    // (not) recursive case
+    return memo[n]
+}
+
+
+console.log('newSetArray: ', new Array(3).fill(new Array(4).fill(0)))
+
+const climbStairs2 = function(n) {
+    const arr = new Array(n).fill(0)
+    arr[0]=0; arr[1]=1; arr[2]=2
+    for (let i=3; i<=n; i++) {
+        arr[i]=arr[i-1]+arr[i-2]
+    }
+    return arr[n]
+}
+
+console.log('climbStairs 100: ', climbStairs(100))
+console.log('climbStairs2 100: ', climbStairs2(100))
+
+// const climbStairs = n => n<=2 ? n : (climbStairs(n-1) + climbStairs(n-2))
+
+
+// steps = 0 => 0
+
+// steps = 1 => 1
+// 1
+
+// steps = 2 => 2
+// 1 1
+// 2
+
+// steps = 3 => 3
+// 1 1 1
+// 2 1
+// 1 2
+
+// steps = 4 => 5
+// 1 1 1 1
+// 2 1 1
+// 1 2 1
+// 1 1 2
+// 2 2
+
+// steps = 5 => 8
+// 1 1 1 1 1
+// 2 1 1 1
+// 1 2 1 1
+// 1 1 2 1
+// 1 1 1 2
+// 2 2 1
+// 2 1 2
+// 1 2 2
+
+// cm = cm[n-1] + cm[n-2]
+
+
+
+///////////////////////
+
+const createTakenBoard = (board) => {
+    let takenBoard = board.map(innerArray => [...innerArray])
+    for (let i=0; i<takenBoard.length; i++) { // convert board to 0s
+        for (let j=0; j<takenBoard[i].length; j++) {
+            takenBoard[i][j] = 0
+        }
+    }
+    return takenBoard
+}
+
+const findFirstLetter = (board, firstLetter) => {
+    let instanceCoordinates = []
+    for (let i=0; i<board.length; i++) {
+        for (let j=0; j<board[i].length; j++) {
+            if (board[i][j] === firstLetter) {
+                instanceCoordinates.push([i,j])
+            }
+        }
+    }
+    return instanceCoordinates
+}
+
+const recursiveDirections = (coordinates, word, board, takenBoard, instance) => {
+    
+    if (word.length === 0) return true
+
+    // making takenArray all untaken again:
+    // takenBoard = new Array(board.length).fill(new Array(board[0].length).fill(0))
+
+    let i = coordinates[instance][0]
+    let j = coordinates[instance][1]
+    
+    takenBoard[i][j] = 1
+    
+    // if (board[i][j+1] && takenBoard[i][j+1] === 0) { // right
+    //     recursiveDirections([i, j+1], word.slice(1))
+    // }
+    // if (board[i][j-1] && takenBoard[i][j-1] === 0) { // left
+    //     recursiveDirections([i, j-1], word.slice(1))
+    // }
+    // if (board[i-1][j] && takenBoard[i-1][j] === 0) { // up
+    //     recursiveDirections([i-1, j], word.slice(1))
+    // }
+    // if (board[i+1][j] && takenBoard[i+1][j] === 0) { // down
+    //     recursiveDirections([i+1, j], word.slice(1))
+    // }
+
+    //after concluding that cannot make word from that letter, try other firstlettercoordinates
+    // instance++
+
+    return false
+}
+
+const exist = (board, word) => {
+    // let takenBoard = createTakenBoard([...board])
+    let takenBoard = new Array(board.length).fill(new Array(board[0].length).fill(0))
+    console.log('board: ', board)
+    console.log('takenBoard: ', takenBoard)
+    let firstLetterCoordinates = findFirstLetter(board, word[0])
+    console.log('firstLetterCoordinates: ', firstLetterCoordinates)
+    let instance = 0
+    recursiveDirections(firstLetterCoordinates, word, board, takenBoard, instance)
+}
+
+exist([['a', 'b', 'c'], ['d','e','d'], ['f', 'g', 'f']], 'abedf') // => true
+
+// // a.b.c
+// // d.e.d
+// // f.g.h
+
+// Given an integer array nums sorted in non-decreasing order,
+// return an array of the squares of each number sorted in non-decreasing order.
+
+const sortedSquare = nums => nums.map(num => num**2).sort((a,b) => a-b)
+
+//write sortedSquare with O(n) time complexity. The above has O(nlog(n))
+
+console.log(sortedSquare([-4,-1,0,3,10]))
