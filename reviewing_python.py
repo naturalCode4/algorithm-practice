@@ -373,5 +373,47 @@ path.glob('*.js') # all javascript files
 # text messaging
 # openpyxl for working with excel through python
 
-    
+#declaring an array
+#arrays can directly handle arithmetic operations, but less flexibility with modification (like addition, deletion), of data
+#arrays can only consist of elements of the same type. Lists can have any type
+#arrays can only be printed by looping through each element
+#arrays are generally better for large data sizes, lists generally better for smaller
+import array as arr #arr is an alias here
 
+arr1 = arr.array('i', [6,5,4,3])
+print(arr1) # ==> array('i', [6, 5, 4, 3])
+for i in range(len(arr1)):
+    print(arr1[i])
+    
+arr1.remove(3)
+arr1.append(7)
+arr1.insert(1, 9)
+arr1.index
+print(arr1)
+print(arr1.count(5))
+
+list1 = [20,30,40]
+list1.remove(30)
+list1.append(50)
+list1.insert(1, 25)
+print(list1)
+    
+#sets create unique list
+
+list1 = [1,2,2,3]
+set1 = set(list1)
+print(list1==set1) # ==> False
+len(set1) # 
+len(set1) 
+
+# locals() is all variables at current local level
+# globals() gets all global variables (not locals!)
+
+print(12/2-1)
+
+#enumerate
+
+arr = ['a','b','c','d','e']
+enumerated_arr = list(enumerate(arr))
+print(enumerated_arr[0][1]) # => 'a'
+print(enumerated_arr)
