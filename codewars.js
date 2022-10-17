@@ -123,51 +123,7 @@ rgb(148, 0, 211) // returns 9400D3
 // D5 = 13*16 + 5 = 213
 
 // console.log(150%16)
-// function hexadecimalConverter(r,g,b) {
-
-//     const letterObject = {
-//         10: 'A',
-//         11: 'B',
-//         12: 'C',
-//         13: 'D',
-//         14: 'E',
-//         15: 'F'
-//     }
-
-//     let hd = '#'
-
-//     if (r > 255) r = 255
-//     if (g > 255) g = 255
-//     if (b > 255) b = 255
-//     if (r < 0) r = 0
-//     if (g < 0) g = 0
-//     if (b < 0) b = 0
-
-//     const rVal = Math.floor(r / 16)
-//     const gVal = Math.floor(g / 16)
-//     const bVal = Math.floor(b / 16)
-
-//     let secondRValue = r % 16
-//     let secondGValue = g % 16
-//     let secondBValue = b % 16
-
-//     rVal >= 10 ? hd += letterObject[rVal] : hd += rVal
-//     secondRValue >=10 ? hd += letterObject[secondRValue] : hd += secondRValue
-
-//     gVal >= 10 ? hd += letterObject[gVal] : hd += gVal
-//     secondGValue >=10 ? hd += letterObject[secondGValue] : hd += secondGValue
-
-//     bVal >= 10 ? hd += letterObject[bVal] : hd += bVal
-//     secondBValue >=10 ? hd += letterObject[secondBValue] : hd += secondBValue
-
-//     // `#${rString}${gString}${bString}`
-
-//     return hd
-// }
-
-function hexadecimalConverter(...args) {
-
-    console.log(args)
+function hexadecimalConverter(r,g,b) {
 
     const letterObject = {
         10: 'A',
@@ -180,6 +136,48 @@ function hexadecimalConverter(...args) {
 
     let hd = '#'
 
+    if (r > 255) r = 255
+    if (g > 255) g = 255
+    if (b > 255) b = 255
+    if (r < 0) r = 0
+    if (g < 0) g = 0
+    if (b < 0) b = 0
+
+    const rVal = Math.floor(r / 16)
+    const gVal = Math.floor(g / 16)
+    const bVal = Math.floor(b / 16)
+
+    let secondRValue = r % 16
+    let secondGValue = g % 16
+    let secondBValue = b % 16
+
+    rVal >= 10 ? hd += letterObject[rVal] : hd += rVal
+    secondRValue >=10 ? hd += letterObject[secondRValue] : hd += secondRValue
+
+    gVal >= 10 ? hd += letterObject[gVal] : hd += gVal
+    secondGValue >=10 ? hd += letterObject[secondGValue] : hd += secondGValue
+
+    bVal >= 10 ? hd += letterObject[bVal] : hd += bVal
+    secondBValue >=10 ? hd += letterObject[secondBValue] : hd += secondBValue
+
+    // `#${rString}${gString}${bString}`
+
+    return hd
+}
+
+function hexadecimalConverter(...args) {
+
+    const letterObject = {
+        10: 'A',
+        11: 'B',
+        12: 'C',
+        13: 'D',
+        14: 'E',
+        15: 'F'
+    }
+
+    let hexadecimalCode = '#'
+
     for (let i=0; i<args.length; i++) {
 
         if (args[i] > 255) args[i] = 255
@@ -188,14 +186,18 @@ function hexadecimalConverter(...args) {
         const firstIValue = Math.floor(args[i] / 16)
         let secondIValue = args[i] % 16
         
-        firstIValue >= 10 ? hd += letterObject[firstIValue] : hd += firstIValue
-        secondIValue >=10 ? hd += letterObject[secondIValue] : hd += secondIValue
+        firstIValue >= 10 ? hexadecimalCode += letterObject[firstIValue] : hexadecimalCode += firstIValue
+        secondIValue >=10 ? hexadecimalCode += letterObject[secondIValue] : hexadecimalCode += secondIValue
 
     }
-    return hd
+
+    return hexadecimalCode
 }
 
-console.log(hexadecimalConverter(255,0,132))
+console.log(hexadecimalConverter(0,0,0)) // => #000000
+console.log(hexadecimalConverter(97,219,251)) // => #61DBFB
+console.log(hexadecimalConverter(55,111,222)) // => #376FDE
+console.log(hexadecimalConverter(255,255,255)) // => #FFFFFF
 
 //sorting tshirt sizes
 

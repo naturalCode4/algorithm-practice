@@ -503,20 +503,71 @@ const nextGreatestLetter = (letters, target) => {
 
 const productExceptSelf = nums => {
     return nums.map((element, index) => {
-        console.log('hit1', 'element: ', element, 'index: ', index)
+        // console.log('hit1', 'element: ', element, 'index: ', index)
         return element = nums.reduce((a, b, i) => {
-            console.log('boopbeep', 'a: ', a, 'b: ', b, 'i: ', i)
+            // console.log('boopbeep', 'a: ', a, 'b: ', b, 'i: ', i)
             if (index !== i) {
-                console.log('hit2', 'a: ', a, 'b: ', b, 'i: ', i)
+                // console.log('hit2', 'a: ', a, 'b: ', b, 'i: ', i)
                 return a * b
             } else {
-                console.log('hit3', 'a: ', a, 'b: ', b, 'i: ', i)
+                // console.log('hit3', 'a: ', a, 'b: ', b, 'i: ', i)
                 return a
             }
         }, 1)
     })
 }
 
-console.log(productExceptSelf([1,2,3,4,5]))
-console.log(productExceptSelf([4,3,2,1,2]))
-console.log(productExceptSelf([-1,1,0,-3,3]))
+// console.log(productExceptSelf([1,2,3,4,5]))
+// console.log(productExceptSelf([4,3,2,1,2]))
+// console.log(productExceptSelf([-1,1,0,-3,3]))
+
+// Find the Duplicate Number, without modifying the array nums and using only constantt extra white space. I currently do not satisfy that time complexity criteria
+
+const findDuplicate = nums => {
+    let duplicate
+    nums.every((num, ind) => {
+        let nums2 = [...nums]
+        nums2.splice(ind, 1)
+        console.log('nums', nums2)
+        if (nums2.includes(num)) {
+            duplicate = num
+            return false
+        }
+        return true
+    })
+    return duplicate
+}
+
+// console.log(findDuplicate([3,1,5,4,1,2]))
+// console.log(findDuplicate([1,3,4,2,2]))
+
+const isPalindrome = str => {
+    for (let i=0; i<Math.ceil(str.length/2); i++) {
+        if (str[i] !== str[(str.length-1)-i]) {
+            return false
+        }
+    }
+    return true
+}
+
+
+const palindromePairs = words => {
+    let output = []
+    for (let i=0; i<words.length; i++) {
+        for (let j=0; j<words.length; j++) {
+            if (i !== j) {
+                const combo = words[i] + words[j]
+                if (isPalindrome(combo)) {
+                    output.push([i,j])
+                }
+            }
+        }
+    }
+    return output
+}
+
+
+console.log(isPalindrome('racecar')) // => true
+console.log(isPalindrome('dropkick')) // => false
+
+console.log(palindromePairs(["abcd","dcba","lls","s","sssll"]))

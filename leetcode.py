@@ -101,6 +101,15 @@ def shuffle_array(arr):
             shuffled.append(arrs[1][i])
     return shuffled
         
-print(shuffle_array(arr))
-        
+# print(shuffle_array(arr))
+
+# 287. Find the Duplicate Number
+
+def find_duplicate(nums):
+    for num in nums:
+        if nums.count(num) >= 2:
+            return num
+    else:
+        return False
     
+print(find_duplicate([1,2,3,4,5,3]))
