@@ -483,3 +483,40 @@ const deleteDuplicates = function(head) {
     }
     return head
 }
+
+// Find smallest letter greater than target
+
+const nextGreatestLetter = (letters, target) => {
+    for (let i=0; i<=letters.length-1; i++) {
+        const comparisonLetter = letters[i]
+        if (comparisonLetter.charCodeAt(0) > target.charCodeAt(0)) {
+            return comparisonLetter
+        }
+    }
+    return letters[0]
+}
+
+// console.log(nextGreatestLetter(letters = ["c","f","j"], target = "a")) // => a
+// console.log(nextGreatestLetter(letters = ["x","x","y","y"], target = "z")) // => x
+
+// Product of Array Except Self, written in O(n) time complexity. Mine currently does not
+
+const productExceptSelf = nums => {
+    return nums.map((element, index) => {
+        console.log('hit1', 'element: ', element, 'index: ', index)
+        return element = nums.reduce((a, b, i) => {
+            console.log('boopbeep', 'a: ', a, 'b: ', b, 'i: ', i)
+            if (index !== i) {
+                console.log('hit2', 'a: ', a, 'b: ', b, 'i: ', i)
+                return a * b
+            } else {
+                console.log('hit3', 'a: ', a, 'b: ', b, 'i: ', i)
+                return a
+            }
+        }, 1)
+    })
+}
+
+console.log(productExceptSelf([1,2,3,4,5]))
+console.log(productExceptSelf([4,3,2,1,2]))
+console.log(productExceptSelf([-1,1,0,-3,3]))
