@@ -542,32 +542,148 @@ const findDuplicate = nums => {
 // console.log(findDuplicate([1,3,4,2,2]))
 
 const isPalindrome = str => {
-    for (let i=0; i<Math.ceil(str.length/2); i++) {
-        if (str[i] !== str[(str.length-1)-i]) {
-            return false
-        }
+    let reversedStr = str.split('')
+    reversedStr = reversedStr.reverse()
+    reversedStr = reversedStr.join('')
+    if (str !== reversedStr) {
+        return false
     }
     return true
 }
 
+// const palindromePairs = words => {
+//     let output = []
+//     for (let i=0; i<words.length; i++) {
+//         for (let j=0; j<words.length; j++) {
+//             if (i !== j) {
+//                 const combo = words[i] + words[j]
+//                 if (isPalindrome(combo)) {
+//                     output.push([i,j])
+//                 }
+//             }
+//         }
+//     }
+//     return output
+// }
 
-const palindromePairs = words => {
+// console.log(isPalindrome('racecar')) // => true
+// console.log(isPalindrome('dropkick')) // => false
+// console.log(palindromePairs(["abcd","dcba","lls","s","sssll"]))
+
+/* PSEUDOCODE
+First put every string into hashmap. "Pre-processing" in input words
+Declare empty output array
+Iterate through the words array, 
+    condition: possible strings' length are <= word length // Adin says this is false
+    and create list of possible strings that make it a palindrome when combined (prepended or appended)
+    check if any of possible strings are in hashmap
+        if so, add to output array
+
+HASHMAP
+map = {
+    "abcd": 0,
+    "dcba": 1,
+    "lls": 2,
+    "s": 3,
+    "sssll": 4
+}
+
+declare currentWord = "abcd"
+
+how to find palindrome completions
+    same backwards
+    same backwards - 1st letter
+    same backwards + 1 letter
+currentWordPalindromes = ['cba', 'dcba', 'edcba']
+
+// let list = [sssll, xllsss] => sssllxllsss
+
+// sssll => 'llsss', lsss, sss, ss, s, "", 'llsss', llss, lls, ls, 'l', "" // make set
+// xllsss => sssllx, ssllx, sllx, llx, lx, x, "", sssllx, sssll, sssl, sss, ss, s, ""
+
+time complexity: O(n + nm) => O(nm) where n is length of words array and m is average word length. Does simplify to nm
+O(17n) => O(n)
+
+*/
+const createHashMap = arr => {
+    let hashMap = {}
+    arr.forEach((str, index) => {
+        hashMap[str] = index
+    })
+    return hashMap
+}
+
+const liamIsStupidAlgorithm = words => {
+
     let output = []
+    let hashMap = createHashMap(words)
+    console.log('hashMap', hashMap)
+
     for (let i=0; i<words.length; i++) {
-        for (let j=0; j<words.length; j++) {
-            if (i !== j) {
-                const combo = words[i] + words[j]
-                if (isPalindrome(combo)) {
-                    output.push([i,j])
-                }
+
+        const currentWord = words[i]
+        let currentWordPossy = new Set([])
+        let currentWordReversed = words[i].split('').reverse() // reverse word and make array for mutability
+
+        for (let j=0; j<=currentWord.length; j++) { // add to possibility array removing from front of reversed string
+            currentWordPossy.add(currentWordReversed.join(''))
+            currentWordReversed.shift()
+        }
+
+        currentWordReversed = words[i].split('').reverse() // reset word
+
+        for (let h=0; h<=currentWord.length; h++) { // add to possibility array removing from back of reversed string
+            currentWordPossy.add(currentWordReversed.join(''))
+            currentWordReversed.pop()
+        }
+
+        if (currentWord.length === 1) { // instead of this being here, wrap the rest of the code as a conditional of this not being the case
+            currentWordPossy = new Set([''])
+        }
+
+        if (currentWord.length === 1) {
+            output.push
+        }
+
+        console.log('currentWordPossy', currentWordPossy) // sssll => ['llsss', 'lsss', 'sss', 'ss', 's', '', 'llss', 'lls', 'll','l']
+        for (let k=0; k<currentWordPossy.size; k++) {
+            let str = [...currentWordPossy][k]
+                console.log('hit1', i, str, hashMap[str])
+            if (hashMap[str] != undefined && isPalindrome(currentWord + str)) {
+                console.log('hit2', i, hashMap[str])
+                output.push([i, hashMap[str]]) 
             }
         }
     }
+    console.log('output2: ', output)
     return output
 }
+//issue with possibilities array including self if a one letter value. need to catch
+liamIsStupidAlgorithm(["abcd","dcba","lls","s","sssll", ""])
 
+const binarySearch = (list, target) => {
+    let middleIndex = Math.floor(list.length / 2)
+    if (list[middleIndex] === target) {
+        return middleIndex
+    } else if (target < list[middleIndex] && list.length > 1) {
+        binarySearch(list.splice(0, middleIndex), target)
+    } else if (target > list[middleIndex] && list.length > 1) {
+        binarySearch(list.splice(middleIndex), target)
+    }
+}
 
-console.log(isPalindrome('racecar')) // => true
-console.log(isPalindrome('dropkick')) // => false
+// const searchInsert = (nums, target) => {
+//     binarySearch(nums, target)
+//     // if (nums.includes(target)) {
+//     //     return nums.indexOf(target)
+//     } else {
+//         for (let i=0; i<nums.length; i++) {
+//             if (target < nums[i]) {
+//                 return i
+//             }
+//         }
+//     } 
+//     return nums.length
+// }
 
-console.log(palindromePairs(["abcd","dcba","lls","s","sssll"]))
+console.log(binarySearch([1,3,5,6], 4))
