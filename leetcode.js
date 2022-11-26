@@ -943,7 +943,6 @@ const groupAnagrams = function(strs) {
 const isValidSudoku = function(board) {
 
     for (let i=0; i<9; i++) {
-        console.log(i)
         if (!isValid(board[i]) || !isValid(formatColumn(board, i)) || !isValid(formatBox(board, i))) {
             return false
         }
@@ -992,11 +991,8 @@ const formatBox = function(board, boxNumber) {
             array = [board[6].slice(6), board[7].slice(6), board[8].slice(6)]
             break;
         default:
-            console.log('not a valid column from 1-9')
     }
 
-    console.log('hit formatBox')
-    console.log(array)
     array = [...array[0], ...array[1], ...array[2]]
 
     return array
@@ -1024,4 +1020,4 @@ console.log('isValidSudoku', isValidSudoku([
 ,["7",".",".",".","2",".",".",".","6"]
 ,[".","6",".",".",".",".","2","8","."]
 ,[".",".",".","4","1","9",".",".","5"]
-,[".",".",".",".","8",".",".","7","9"]]))
+,[".",".",".",".","8",".",".","7","9"]])) // ==> true
