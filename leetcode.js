@@ -872,3 +872,156 @@ const isAnagram = function(s, t) {
     
     return 'something went wrong'
 };
+
+const isAnagram2 = function(s, t) { // !nope! edge case where same length and letters are same, but different quantity of each letter. Example: [["ddddddddddg","dgggggggggg"]]
+    if (s.length !== t.length) {
+        return false
+    }
+    for (let i=0; i<s.length; i++) {
+        if (!t.includes(s[i])) {
+            return false
+        }
+    }
+    for (let i=0; i<t.length; i++) { // we also need to look the other way, or else an edge case of for example, isAnagram('aaaaaa', 'abcdef') would return true!
+        if (!s.includes(t[i])) {
+            return false
+        }
+    }
+    return true
+}
+
+console.log(isAnagram('hello', 'world'))
+console.log(isAnagram('anagram', 'mraaang'))
+console.log(isAnagram('aaaaaa', 'abcdef')) // ERROR!!! RETURNS TRUE
+
+// Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+// example...
+// Input: strs = ["eat","tea","tan","ate","nat","bat"]
+// Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+const groupAnagrams = function(strs) {
+        
+    let solution = [[strs[0]]]
+    
+    for (let i=1; i<strs.length; i++) {
+        console.log('hit0')
+        for (let j=0; j<solution.length; j++) {
+            
+            console.log('hit1')
+            console.log('solution: ', solution)
+            console.log('solution[j]: ', solution[j])
+            console.log('j: ', j)
+            console.log('i: ', i)
+            
+            if (isAnagram(strs[i], solution[j][0])) {
+                console.log('hit2')
+                solution[j].push(strs[i])
+                break
+            } else if (j === solution.length - 1) {
+                console.log('hit3')
+                solution.push([strs[i]]) // if anagram does not exist ==> push new array with new anagram into solutions array
+                break
+            }
+        }
+    }
+    console.log('hit4')
+    return solution
+    
+};
+
+// VALID SUDOKU
+// Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+// Each row must contain the digits 1-9 without repetition.
+// Each column must contain the digits 1-9 without repetition.
+// Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+// Note:
+
+// A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+// Only the filled cells need to be validated according to the mentioned rules.
+
+const isValidSudoku = function(board) {
+
+    for (let i=0; i<9; i++) {
+        console.log(i)
+        if (!isValid(board[i]) || !isValid(formatColumn(board, i)) || !isValid(formatBox(board, i))) {
+            return false
+        }
+    }
+
+    return true
+};
+
+const formatColumn = function(board, columnIndex) {
+    let array = []
+    for (let i=0; i<9; i++) {
+        array.push(board[i][columnIndex])
+    }
+    return array
+}
+
+const formatBox = function(board, boxNumber) {
+    let array = []
+    
+    switch (boxNumber) {
+        case 0:
+            array = [board[0].slice(0,3), board[1].slice(0,3), board[2].slice(0,3)]
+            break;
+        case 1:
+            array = [board[0].slice(3,6), board[1].slice(3,6), board[2].slice(3,6)]
+            break;
+        case 2:
+            array = [board[0].slice(6), board[1].slice(6), board[2].slice(6)]
+          break;
+        case 3:
+            array = [board[3].slice(0,3), board[4].slice(0,3), board[5].slice(0,3)]
+            break;
+        case 4:
+            array = [board[3].slice(3,6), board[4].slice(3,6), board[5].slice(3,6)]
+            break;
+        case 5:
+            array = [board[3].slice(6), board[4].slice(6), board[5].slice(6)]
+          break;
+        case 6:
+            array = [board[6].slice(0,3), board[7].slice(0,3), board[8].slice(0,3)]
+            break;
+        case 7:
+            array = [board[6].slice(3,6), board[7].slice(3,6), board[8].slice(3,6)]
+            break;
+        case 8:
+            array = [board[6].slice(6), board[7].slice(6), board[8].slice(6)]
+            break;
+        default:
+            console.log('not a valid column from 1-9')
+    }
+
+    console.log('hit formatBox')
+    console.log(array)
+    array = [...array[0], ...array[1], ...array[2]]
+
+    return array
+}
+
+const isValid = function(array) {
+    let i=array.length-1
+    while (i > 0) {
+        let copyArray = [...array]
+        copyArray.splice(i,1)
+        if (copyArray.includes(array[i]) && array[i] !== '.') {
+            return false
+        }
+        i--
+    }
+    return true
+}
+
+console.log('isValidSudoku', isValidSudoku([
+ ["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]))
