@@ -113,3 +113,28 @@ def find_duplicate(nums):
         return False
     
 print(find_duplicate([1,2,3,4,5,3]))
+
+# find majority element
+
+def majorityElement(nums):
+    nums.sort()
+    curr_num, high_freq_num, curr_freq, high_freq = nums[0], nums[0], 0, 0
+    print(nums, curr_num, high_freq_num, curr_freq, high_freq)
+    for num in nums:
+        if num != curr_num:
+            curr_num = num
+            curr_freq = 1
+        else:
+            curr_freq += 1
+            if curr_freq > high_freq:
+                high_freq = curr_freq
+                high_freq_num = curr_num
+        print(curr_freq)
+    return high_freq_num
+            
+print(majorityElement([1,22,33,33,4,5]))
+
+[info: {
+    [this, that],
+    [this, [this, that]]
+}]

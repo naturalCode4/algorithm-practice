@@ -663,14 +663,34 @@ liamIsStupidAlgorithm(["abcd","dcba","lls","s","sssll", ""])
 
 const binarySearch = (list, target) => {
     let middleIndex = Math.floor(list.length / 2)
+    console.log('middleIndex: ', middleIndex)
     if (list[middleIndex] === target) {
         return middleIndex
+    }
+    if (list.length <= 3) {const getTwoIntegersThatSumToTarget = (nums, target) => {
+  let hashMap = {}
+  for (let i = 0; i < nums.length; i++) {
+    hashMap[nums[i]] = i
+  }
+  for (let i = 0; i < nums.length; i++) {
+    let secondInteger = target - nums[i]
+    if (hashMap[secondInteger] !== undefined && hashMap[secondInteger] !== i) {
+      return [i, hashMap[secondInteger]]
+    }
+  }
+  return -1
+}
+
+console.log(getTwoIntegersThatSumToTarget([1, 2, 3, 4, -100], -96))
+        return Math.floor(list.length / 2)
     } else if (target < list[middleIndex] && list.length > 1) {
         binarySearch(list.splice(0, middleIndex), target)
     } else if (target > list[middleIndex] && list.length > 1) {
         binarySearch(list.splice(middleIndex), target)
     }
 }
+
+console.log('binarySearch: ', binarySearch([1,3,5,6,7,9,12,15], 9))
 
 // const searchInsert = (nums, target) => {
 //     binarySearch(nums, target)
@@ -686,4 +706,169 @@ const binarySearch = (list, target) => {
 //     return nums.length
 // }
 
-console.log(binarySearch([1,3,5,6], 4))
+/* 
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+*/
+
+// potentially no solution. If there are two elements that add to the target, there will be exactly one pair. If no solution, return -1
+
+const getTwoIntegersThatSumToTarget = (nums, target) => {
+    let hashMap = {}
+    for (let i = 0; i < nums.length; i++) {
+      hashMap[nums[i]] = i
+    }
+    for (let i = 0; i < nums.length; i++) {
+      let secondInteger = target - nums[i]
+      if (hashMap[secondInteger] !== undefined && hashMap[secondInteger] !== i) {
+        return [i, hashMap[secondInteger]]
+      }
+    }
+    return -1
+  }
+  
+  console.log(getTwoIntegersThatSumToTarget([1, 2, 3, 4, -100], -96))
+
+  // get majority element
+
+const majorityElement = function(nums) {
+    const sortedNums = nums.sort(function(a,b) {return a-b})
+    let currentFrequency = 0
+    let highestFrequency = 0
+    let currentNum = sortedNums[0]
+    let highestFrequencyNum = sortedNums[0]
+    sortedNums.forEach((num, ind) => {
+        if (num == currentNum) {
+            currentFrequency++
+            if (currentFrequency > highestFrequency) {
+                highestFrequencyNum = num
+                highestFrequency = currentFrequency
+            }
+        } else {
+            currentNum = num
+            currentFrequency = 1
+        }
+    })
+    return highestFrequencyNum
+}
+
+console.log(majorityElement([2,1,2,1,2,1,2,1,1,2,3,3,3,3]))
+
+let aList = [1,4,5,3,3,-5,-100,200]
+aList.sort((a,b) => a - b)
+console.log(aList)
+
+// Return lowest non-included natural number (Int > 0)
+
+console.log('begin')
+
+function solution(A) {
+    const n = A.length
+    let hashMap = {}
+    for (let i=0; i<n; i++) {
+        if (hashMap[A[i]] == undefined) {
+            hashMap[A[i]] = i
+        }
+    }
+    for (let j=1; j<n+2; j++) {
+        if (hashMap[j] == undefined) {
+            return j
+        }
+    }
+    return 'end'
+}
+
+console.log(solution([1,3,6,4,1,2]))
+console.log(solution([1,2,3]))
+console.log(solution([-1,-3]))
+
+function solution2(A, K) {
+    var n = A.length;
+    for (var i = 0; i < n ; i++) {
+        if (A[i] + 1 < A[i + 1])
+            return false;
+    }
+    if (A[0] > 1 || A[n - 1] < K)
+        return false;
+    else
+        return true;
+}
+
+console.log(solution2([1,2,3], 3))
+console.log(solution2([1,2,3,4], 3))
+console.log(solution2([1,1,3], 3))
+
+function solution3(A, B) {
+
+    A = A.split(':')
+    A = [parseInt(A[0]), parseInt(A[1])]
+    B = B.split(':')
+    B = [parseInt(B[0]), parseInt(B[1])]
+    
+    console.log('A:', A, 'B:', B)
+
+    let roundedA = A
+    let roundedB = B
+
+    // Transform A (Round Up)
+    if (A[1] >= 1 && A[1] <= 15) {
+        roundedA[1] = 15
+    }
+    if (A[1] >= 16 && A[1] <= 30) {
+        roundedA[1] = 30
+    }
+    if (A[1] >= 31 && A[1] <= 45) {
+        roundedA[1] = 45
+    }
+    if (A[1] >= 46 && A[1] <= 60) {
+        roundedA[1] = 0
+        roundedA[0] += 1
+    }
+
+    // Transform B (Round Down)
+    if (B[1] >= 0 && B[1] <= 14) {
+        roundedB[1] = 0
+    }
+    if (B[1] >= 15 && B[1] <= 29) {
+        roundedB[1] = 15
+    }
+    if (B[1] >= 30 && B[1] <= 44) {
+        roundedB[1] = 30
+    }
+    if (B[1] >= 45 && B[1] <= 59) {
+        roundedB[1] = 45
+    }
+
+    console.log('A:', roundedA, 'B:', roundedB)
+
+    let totalGames = 0
+
+    totalGames += 4*(roundedB[0] - roundedA[0])
+    totalGames += (roundedB[1] - roundedA[1])/15
+
+    return totalGames
+}
+
+console.log(solution3('20:01', '22:00'))
+
+// return true if string s and string t are anagrams, false if not
+
+const isAnagram = function(s, t) {
+    
+    let split_T = t.split('')
+    
+    for (let i=0; i<s.length; i++) {
+        if (split_T.includes(s[i])) {
+            split_T.splice(split_T.indexOf(s[i]), 1)
+        } else {
+            return false // we immediately know that they are not anagrams i t does not include each and every letter of s
+        }
+    }
+    
+    if (split_T.length === 0) {
+        return true
+    } else {
+        return false
+    }
+    
+    return 'something went wrong'
+};
