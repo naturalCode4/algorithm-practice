@@ -1127,3 +1127,102 @@ const maxProfit = function(prices) {
     
     return maxProfit
 }
+
+// work in progress of Minimum Window Substring
+
+var minWindow = function(s, t) {
+    
+    //cover edge cases of t.length is 0 or greater than s.length
+    if (t.length===0 || t.length>s.length) {
+        return ""
+    }
+    
+    //declare left at 0 and right at t.length-1
+    let left = 0
+    let right = t.length-1
+    
+    //declare empty substring 
+    let substring = ""
+    
+    // declare map that contains values from left to right
+    let map = {}
+    let stringSlice = s.slice(left, right+1)
+    for (let i=0; i<stringSlice.length; i++) {
+        if (map.hasOwnProperty(stringSlice[i])) {
+            map[stringSlice[i]]++
+        } else {
+            map[stringSlice[i]] = 1
+        }
+    }
+            
+    //iteration right
+    while (right < s.length) {
+        
+        console.log('right while loop:', 'right:', right, 'substring:', substring)
+        //check if map has all values (including duplicates)
+        let substringHasAllLetters = true
+        for (let i=0; i<t.length; i++) {
+            if (!map.hasOwnProperty(t[i])) { //doesnt incorporate duplicates yet
+                substringHasAllLetters = false
+                break
+            } 
+        }
+        if (substringHasAllLetters) {
+            substring = s.slice(left, right+1)
+            break
+        }
+        
+        //shift right to the right
+        right++
+        
+        //add value to map
+        if (map[s[right]] >= 1) {
+            map[s[right]]++
+        } else {
+            map[s[right]] = 1
+        }
+        
+    }
+    
+    //if not found when right hits end, return empty string
+    if (!substring) {
+        return substring
+    }
+    
+    //iteration left
+    while (left<=right) {
+    
+        //track previous substring
+        substring = s.slice(left, right+1)
+        
+         //remove old value from map
+        if (map[left] >= 1) {
+            map[left]--
+        } else {
+            delete map[left]
+        }
+            
+        //shift left to the right
+        left++
+        
+        //check that map still has all values
+        // if yes, continue
+        // if not, return previous substring as solution
+        let substringHasAllLetters = true
+        for (let i=0; i<t.length; i++) {
+            if (!map.hasOwnProperty(t[i])) { //doesnt incorporate duplicates yet
+                substringHasAllLetters = false
+                return substring
+            } 
+        }
+        
+    }
+};
+
+
+
+// sliding window METHOD...
+// start: left at 0, right at t.length-1
+// tracking values between left and right in a map. adding and removing from map with each shift
+// move right over until string contains all values in substring.
+// once valid, move left over to narrow string to smallest
