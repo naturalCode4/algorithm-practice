@@ -1021,3 +1021,27 @@ console.log('isValidSudoku', isValidSudoku([
 ,[".","6",".",".",".",".","2","8","."]
 ,[".",".",".","4","1","9",".",".","5"]
 ,[".",".",".",".","8",".",".","7","9"]])) // ==> true
+
+
+// twosum using two pointers -- no extra space
+const twoSum = function(numbers, target) {
+    
+    let left = 0
+    let right = numbers.length - 1
+    
+    while (left < right) {
+        
+        if (numbers[left] + numbers[right] === target) {
+            return [left + 1, right + 1]
+            
+        } else if (numbers[left] + numbers[right] > target) {
+            right--
+            
+        } else if (numbers[left] + numbers[right] < target) {
+            left++
+        }
+        
+    }
+    
+    return 'something went wrong'
+};
