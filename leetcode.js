@@ -1045,3 +1045,85 @@ const twoSum = function(numbers, target) {
     
     return 'something went wrong'
 };
+
+// You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+// Find two lines that together with the x-axis form a container, such that the container contains the most water.
+// Return the maximum amount of water a container can store.
+// Notice that you may not slant the container.
+
+//below code has O(n^2) time complexity. Optimized two-pointer method code is below this one
+
+const maxAreaNonOptimized = function(height) {
+
+    let max = 0
+
+    if (height.length < 2) {
+        return max
+    }
+
+    if (height.length === 2) {
+        return Math.min(height[0], height[1])
+    }
+
+    for (let i=0; i<height.length; i++) {
+        for (let j=1; j<height.length; j++) {
+            const capacity = (j-i)*Math.min(height[i], height[j])
+            max = Math.max(max, capacity)
+        }
+    }
+
+    return max
+}
+
+const maxArea = function(height) {
+
+    if (height.length < 2) {
+        return 0
+    }
+
+    if (height.length === 2) {
+        return Math.min(height[0], height[1])
+    }
+    
+    let left = 0
+    let right = height.length-1
+    let maxArea = 0
+    
+    while (left < right) {
+        
+        let area = (right - left)*Math.min(height[left], height[right])
+        
+        if (area > maxArea) maxArea = area
+        //whichever one is smaller, you move. Because there is no way for the taller one to move and make the capacity bigger
+        if (height[left] < height[right]) { 
+            left++
+        } else {right--}
+        
+    }
+    
+    return maxArea
+}
+
+/* You are given an array prices where prices[i] is the price of a given stock on the ith day.
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0. */
+
+const maxProfit = function(prices) {
+    
+    let minPrice = prices[0]
+    let maxProfit = 0
+    
+    for (let i=0; i<prices.length; i++) {
+        
+        if (prices[i] - minPrice > maxProfit) {
+            maxProfit = prices[i] - minPrice
+        }
+    
+        if (prices[i] < minPrice) {
+            minPrice = prices[i]
+        }
+        
+    }
+    
+    return maxProfit
+}
