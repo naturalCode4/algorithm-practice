@@ -1312,3 +1312,82 @@ const checkInclusion = function(s1, s2) {
     return false
 
 };
+
+// Valid Parenthesis
+
+const isValidParentheses = function(s) {
+    let stack = []
+    const charMap = {')': '(', ']': '[', '}': '{'}
+    for (let i=0; i<s.length; i++) {
+        console.log('stack:', stack, 's[i]:', s[i],  'charMap[s[i]]:', charMap[s[i]])
+        if (charMap[s[i]] && stack.length === 0) {
+            console.log('hit1')
+            return false
+        }
+        if (stack.length > 0 && stack[stack.length - 1] == charMap[s[i]]) { // closing char
+            console.log('hit2')
+            stack.pop()
+        } else {
+            console.log('hit3')
+            stack.push(s[i]) // opening char
+        }
+    }
+
+
+    if (stack.length === 0) {return true} else {return false}
+};
+
+// evaluate reverse polish notation
+// Example 1:
+
+// Input: tokens = ["2","1","+","3","*"]
+// Output: 9
+// Explanation: ((2 + 1) * 3) = 9
+// Example 2:
+
+// Input: tokens = ["4","13","5","/","+"]
+// Output: 6
+// Explanation: (4 + (13 / 5)) = 6
+
+var evalRPN = function(tokens) {
+
+    let stack = []
+    const operations = {'+': '+', '-': '-', '*': '*', '/': '/'}
+
+    tokens.forEach(token => {
+        console.log('token:', token, 'stack', stack)
+        if (!operations[token]) {
+            stack.push(+token)
+        } else {
+            evaluate(token, stack)
+        }
+    })
+
+    return stack[0]
+
+};
+
+const evaluate = (o, stack) => {
+    switch (o) {
+    case '+':
+        console.log('+')
+        stack.push(stack.pop() + stack.pop())
+        break
+    case '-':
+        console.log('-')
+        a = stack.pop()
+        b = stack.pop()
+        stack.push(b - a)
+        break
+    case '*':
+        console.log('*')
+        stack.push(stack.pop() * stack.pop());
+        break
+    case '/':
+        console.log('/')
+        a = stack.pop()
+        b = stack.pop()
+        stack.push(Math.trunc(b / a))
+        break
+    }
+}
