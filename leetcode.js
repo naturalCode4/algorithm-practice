@@ -1226,3 +1226,89 @@ var minWindow = function(s, t) {
 // tracking values between left and right in a map. adding and removing from map with each shift
 // move right over until string contains all values in substring.
 // once valid, move left over to narrow string to smallest
+
+
+// Longest Substring Without Repeating Characters
+
+const lengthOfLongestSubstring = function(s) {
+    
+    
+    if (s.length === 0) {return 0}
+    if (s.length === 1) {return 1}
+    
+    let left = 0
+    let right = 0
+    let maxLength = -Infinity
+    let setMap = new Set()
+    
+    while (right < s.length) {
+        
+        if (!setMap.has(s[right])) {
+            setMap.add(s[right])
+            maxLength = Math.max(setMap.size, maxLength)
+            right++
+        } else {
+            setMap.delete(s[left])
+            left++
+        }
+    }
+    
+    return maxLength
+
+}
+
+/* 
+Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
+In other words, return true if one of s1's permutations is the substring of s2.
+*/
+
+const checkInclusion = function(s1, s2) {
+    
+    const s1Length = s1.length
+    const s2Length = s2.length
+
+    if (s1Length > s2Length) return false
+    
+    let left = 0
+    let right = s1Length - 1
+
+    let hash = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0, 'f': 0, 'g': 0, 'h': 0, 'i': 0, 'j': 0, 'k': 0, 'l': 0, 'm': 0, 'n': 0, 'o': 0, 'p': 0, 'q': 0, 'r': 0, 's': 0, 't': 0, 'u': 0, 'v': 0, 'w': 0, 'x': 0, 'y': 0, 'z': 0}
+
+    let targetHash = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0, 'f': 0, 'g': 0, 'h': 0, 'i': 0, 'j': 0, 'k': 0, 'l': 0, 'm': 0, 'n': 0, 'o': 0, 'p': 0, 'q': 0, 'r': 0, 's': 0, 't': 0, 'u': 0, 'v': 0, 'w': 0, 'x': 0, 'y': 0, 'z': 0}
+
+    for (let i=0; i<s1Length; i++) {
+        targetHash[s1[i]]++
+    }
+
+    for (let i=0; i<s1Length; i++) {
+        hash[s2[i]]++
+    }
+
+    while (right < s2Length) {
+        
+        // console.log('s1', s1, 's2', s2)
+        // console.log('hash', hash, 'targetHash', targetHash)
+
+        if (JSON.stringify(hash) === JSON.stringify(targetHash)) {
+            // console.log('HASHES ARE SAME')
+            return true
+        } else {
+            if (hash[s2[left]] > 1) {
+                hash[s2[left]]-- 
+            } else {
+                hash[s2[left]] = 0
+            }
+            left++
+            right++
+            if (hash[s2[right]] > 0) {
+                hash[s2[right]]++ 
+            } else {
+                hash[s2[right]] = 1
+            }
+
+        }
+    }
+
+    return false
+
+};
