@@ -1439,3 +1439,118 @@ var dailyTemperatures = function(temperatures) {
     }   
     return answer
 };
+
+//Happy Number
+// Write an algorithm to determine if a number n is happy.
+
+// A happy number is a number defined by the following process:
+
+// Starting with any positive integer, replace the number by the sum of the squares of its digits.
+// Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.
+// Those numbers for which this process ends in 1 are happy.
+// Return true if n is a happy number, and false if not.
+
+var isHappy = function(n) {
+
+    let seenValues = new Set()
+
+    const endSearch = () => {
+        return n === 1 || seenValues.has(n)
+    }
+    
+    while (!endSearch()) {
+        seenValues.add(n)
+        n = getNextNumber(n)
+        console.log('n', n, 'seenValues', seenValues)
+    }
+
+    return n === 1
+
+}
+
+var getNextNumber = function(n) {
+    
+    let sum = 0
+    while (n > 0) {
+        const rightDigit = n % 10
+        sum += rightDigit**2
+        n = Math.floor(n/10)
+    }
+
+    return sum
+}
+
+// Car Fleet -- Leetcode number 853. Stack problem
+
+const carFleet = function(target, position, speed) {
+    const refactor = refactorArrays(target, position, speed)
+    let stack = []
+    refactor.forEach(el => {
+        stack.push(el)
+        while (stack[stack.length-1] <= stack[stack.length-2] && stack[0]) {
+            stack.pop()
+        }
+    })
+    return stack.length
+};
+
+const refactorArrays = (target, position, speed) => {
+  let jointArray = []
+  for (let i=0; i<position.length; i++) {
+    const car = [position[i], speed[i]]
+    jointArray.push(car)
+  }
+  jointArray.sort((a,b)=>b[0]-a[0])
+  return jointArray.map(car => (target - car[0])/car[1])
+}
+
+// convert prefix to infix mathematic notation
+
+// Input :  Prefix :  *+AB-CD
+// Output : Infix : ((A+B)*(C-D))
+
+// Input :  Prefix :  *-A/BC-/AKL
+// Output : Infix : ((A-(B/C))*((A/K)-L))
+
+// start from end
+// push operands onto queue
+// if operator, put between two letters you popped off of the queue, in order
+
+const convertPrevixtoInfixNotation = function(prefix) {
+    let stack = []
+    prefix = prefix.split('')
+    let prev
+    for (let i=prefix.length-1; i>=0; i--) {
+        if (prefix[i].charCodeAt(0) >= 48) { // is not an operator (i.e. +, -, *, /)
+            stack.push(prefix[i])
+        } else {
+            stack.push(`(${stack.pop()}${prefix[i]}${stack.pop()})`)
+        }
+    }
+    return stack.join('')
+}
+
+console.log(convertPrevixtoInfixNotation('*+AB-CD')) // ==> ((A+B)*(C-D))
+console.log(convertPrevixtoInfixNotation('*-A/BC-/AKL'))
+
+// Next Greatest Element <== https://www.geeksforgeeks.org/next-greater-element/
+
+// The Next greater Element for an element x is the first greater element on the right side of x in the array. Elements for which no greater element exist, consider the next greater element as -1. 
+
+const nextGreatestElement = nums => {
+    let stack = []
+    let answer = nums.map(num => {
+        return {number: num, nextGreatest: -1}
+    })
+    nums.forEach((num, ind) => {
+        while (stack[0] && num > stack[stack.length - 1].number) {
+            console.log('stack', stack, (stack.length - 1).index)
+            console.log(stack[stack.length - 1])
+            answer[stack[stack.length - 1].index] = {number: stack.pop().number, nextGreatest: num} // ==> time complexity O(n)
+        }
+        stack.push({number: num, index: ind})
+    })
+    return answer
+}
+
+console.log(nextGreatestElement([ 13 , 7, 6 , 12 ]))

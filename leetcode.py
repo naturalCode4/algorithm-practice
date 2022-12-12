@@ -138,3 +138,32 @@ print(majorityElement([1,22,33,33,4,5]))
     [this, that],
     [this, [this, that]]
 }]
+
+# Happy Number. Incomplete...
+
+# class Solution:
+#     def isHappy(self, n: int) -> bool:
+#         print('hello', type(n))
+#         if n == 1: 
+#             return True
+#         if len(str(n)) == 1 and n != 1:
+#             return False
+#         else:
+#             n = str(n)
+#             n = list(n)
+#             n = map(square_number, n)
+#             n = list(n)
+#             print(n)
+#             n = sum_digits(n)
+#             self.isHappy(n)
+
+# def sum_digits(arr):
+#     sum = 0
+#     for n in arr:
+#         sum += n
+#     return sum
+
+# def square_number(x):
+#     x = int(x)
+#     x *= x
+#     return x
