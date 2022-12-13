@@ -1554,3 +1554,32 @@ const nextGreatestElement = nums => {
 }
 
 console.log(nextGreatestElement([ 13 , 7, 6 , 12 ]))
+
+// Binary Search Recursion
+
+const search = (nums, target, start = 0, end = nums.length-1) => {
+
+    if (start > end) {
+        return -1
+    }
+
+    let mid = Math.floor((start + end) / 2)
+
+    console.log(nums, target, start, end, mid)
+
+    if (nums[mid] === target) {
+        console.log('nums[mid] === target')
+        return mid
+    }
+
+    if (nums[mid] > target) {
+        console.log('nums[mid] > target')
+        return search(nums, target, start, mid-1)
+    }
+
+    if (nums[mid] < target) {
+        console.log('nums[mid] < target')
+        return search(nums, target, mid+1, end)
+    }
+}
+
