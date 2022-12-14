@@ -1555,7 +1555,7 @@ const nextGreatestElement = nums => {
 
 console.log(nextGreatestElement([ 13 , 7, 6 , 12 ]))
 
-// Binary Search Recursion
+// Binary Search using recursion
 
 const search = (nums, target, start = 0, end = nums.length-1) => {
 
@@ -1583,3 +1583,4 @@ const search = (nums, target, start = 0, end = nums.length-1) => {
     }
 }
 
+// Binary search using while loop
