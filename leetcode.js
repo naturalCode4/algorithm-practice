@@ -1584,3 +1584,78 @@ const search = (nums, target, start = 0, end = nums.length-1) => {
 }
 
 // Binary search using while loop
+
+// Search a 2D Matrix (binary search)
+// Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties:
+
+// Integers in each row are sorted from left to right.
+// The first integer of each row is greater than the last integer of the previous row.
+
+const searchMatrix = function(matrix, target) {
+    
+    let list = []
+    matrix.forEach(array => {
+        list = [...list, ...array]
+    })
+
+    console.log(list)
+
+    let leftIndex = 0
+    let rightIndex = list.length - 1
+
+    while (leftIndex <= rightIndex) {
+
+        let midIndex = Math.floor((leftIndex + rightIndex) / 2)
+
+        if (list[midIndex] === target) {
+            return true
+        }
+        if (list[midIndex] < target) {
+            leftIndex = midIndex + 1
+        }
+        if (list[midIndex] > target) {
+            rightIndex = midIndex - 1
+        }
+    }
+
+    return false
+};
+
+// Koko eating bananas
+// O(n) time complexity (Binary search)
+// leetcode url: https://leetcode.com/problems/koko-eating-bananas/description/
+
+var minEatingSpeed = function(piles, h) {
+    
+    var isValidSpeed = function(k)  {
+            
+        let x = 0
+        for (let i=0; i<piles.length; i++) {
+            x += Math.ceil(piles[i]/k)
+        }
+
+        if (x <= h) {
+            return true
+        } else return false
+    }
+
+    let startSpeed = 1
+    let endSpeed = Math.max(...piles)
+
+    let lowestValid = endSpeed
+
+    while (startSpeed <= endSpeed) {
+
+        let midSpeed = Math.floor((startSpeed + endSpeed) / 2)
+
+        if (isValidSpeed(midSpeed)) {
+            if (midSpeed < lowestValid) lowestValid = midSpeed
+            endSpeed = midSpeed - 1
+        } else {
+            startSpeed = midSpeed + 1
+        }
+    }
+
+    return lowestValid
+
+};
