@@ -1659,3 +1659,124 @@ var minEatingSpeed = function(piles, h) {
     return lowestValid
 
 };
+
+// DYNAMIC PROGRAMMING PRACTICE
+
+// Given 3 numbers {1, 3, 5}, The task is to tell the total number of ways we can 
+// form a number N using the sum of the given three numbers. 
+// (allowing repetitions and different arrangements).
+
+/*
+The total number of ways to form 6 is: 8
+1+1+1+1+1+1
+1+1+1+3
+1+1+3+1
+1+3+1+1
+3+1+1+1
+3+3
+1+5
+5+1
+*/
+
+const combos = num => {
+
+    if (num < 0) {
+        return 0
+    }
+    if (num === 0) {
+        return 1
+    }
+
+    return combos(num - 1) + combos(num - 3) + combos(num - 5)
+
+    // if (num <= 2) {
+    //     return 1
+    // }
+    // if (num === 3) {
+    //     return 2
+    // }
+    // if (num === 4) {
+    //     return 3
+    // }
+    // if (num === 5) {
+    //     return 5
+    // }
+
+}
+
+// LINKED LISTS
+
+// Given a linked list, print every element in order
+
+function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val)
+    this.next = (next===undefined ? null : next)
+}
+    
+var printAllListElements = function(head, n) {
+
+    let prev = new ListNode(0, head)
+    let curr = head
+
+    while (prev.next !== null) {
+        console.log(curr.val)
+        prev = curr
+        curr = curr.next
+    }
+};
+
+// printAllListElements({
+//     val: 1,
+//     next: {
+//         val: 2,
+//         next: {
+//             val: 3,
+//             next: {
+//                 val: 4,
+//                 next: {
+//                     val: 5,
+//                     next: null
+//                 }
+//             }
+//         }
+//     }
+// })
+
+const addElementToLinkedList = function(head, n) {
+
+    let node = head
+    console.log(node.next)
+
+    //traverse to last element
+    while (node.next?.val) {
+        node = node.next
+    }
+
+    node.next = new ListNode(6, null)
+
+    return head
+}
+
+console.log(addElementToLinkedList(
+    new ListNode(1,
+        new ListNode(2,
+            new ListNode(3,
+                new ListNode(4,
+                    new ListNode(5, null)
+
+    ))))
+))
+
+var reverseList = function(head) {
+    
+    let [ prev, curr, next] = [ null, head, null]
+
+    while (curr) {
+        next = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next
+    }
+
+    return prev
+};
