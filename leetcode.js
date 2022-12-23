@@ -1780,3 +1780,84 @@ var reverseList = function(head) {
 
     return prev
 };
+
+// linkedlist -- https://leetcode.com/problems/add-two-numbers/
+var addTwoNumbers = function(l1, l2) {
+
+    let output1 = []
+    let output2 = []
+
+    let total = 0
+    let formattedArray = [[l1, output1], [l2, output2]]
+
+    formattedArray.forEach(el => {
+        let curr = el[0]
+        while (curr !== null) {
+            el[1].unshift(curr.val) // O(2n^2) complexity
+            curr = curr.next
+        }
+        el[1] = +el[1].join("")
+        total += el[1]
+    })
+
+    // 807 => [7, 0, 8]
+    const listValues = (String(total).split("")).reverse().map(string => Number(string))
+
+    let l3 = new ListNode(listValues[0])
+    let curr = l3
+    for (let i=1; i<listValues.length; i++) {
+        curr.next = new ListNode(listValues[i])
+        curr = curr.next
+        console.log(l3, l3.next)
+    }
+    curr.next = null // optional
+
+    return l3
+};
+
+// LinkedList https://leetcode.com/problems/merge-two-sorted-lists/description/
+
+var mergeTwoLists = function(list1, list2) {
+
+    console.log('list1: ', list1)
+    console.log('list2: ', list2)
+
+    let [curr1, curr2] = [list1, list2]
+
+    if (!curr1 && !curr2) return null
+
+    let hasSmallerFirstValue
+
+    console.log(curr1, curr1?.val)
+
+    if (curr1?.val <= curr2?.val || curr2 === null) {
+        console.log('hitA')
+        hasSmallerFirstValue = curr1
+        curr1 = curr1?.next
+    } else {
+        console.log('hitB')
+        hasSmallerFirstValue = curr2
+        curr2 = curr2?.next
+    }
+
+    console.log('hasSmallerFirstValue', hasSmallerFirstValue)
+    let list3 = new ListNode(hasSmallerFirstValue?.val, null)
+    let curr3 = list3
+
+    console.log('curr1', curr1, 'curr1.val', curr1?.val)
+    while (curr1 || curr2) {
+        if (curr1?.val <= curr2?.val || curr2 === null) {
+            console.log('hit1')
+            curr3.next = new ListNode(curr1.val, null)
+            curr1 = curr1.next
+        } else if (curr1?.val > curr2?.val || curr1 === null) {
+            console.log('hit2')
+            curr3.next = new ListNode(curr2.val, null)
+            curr2 = curr2.next
+        }
+        curr3 = curr3?.next
+        console.log('list3', list3, ', curr3', curr3)
+    }
+
+    return list3
+}
