@@ -1815,7 +1815,7 @@ var addTwoNumbers = function(l1, l2) {
     return l3
 };
 
-// LinkedList https://leetcode.com/problems/merge-two-sorted-lists/description/
+// Merge two LinkedLists in ascending order https://leetcode.com/problems/merge-two-sorted-lists/description/
 
 var mergeTwoLists = function(list1, list2) {
 
@@ -1860,4 +1860,83 @@ var mergeTwoLists = function(list1, list2) {
     }
 
     return list3
+}
+
+// LinkedList alternating reordering: https://leetcode.com/problems/reorder-list/
+
+var reorderList = function(head) {
+
+    let duplicateHead = JSON.parse(JSON.stringify(head))
+    // other ways to create deep copy of object:
+        // let duplicateHead = {...head}
+        // let duplicateHead = Object.assign({}, head)
+
+    let result = getReverseListAndLength(duplicateHead)
+    let reversedList = result[0]
+    let listLength = result[1]
+
+    console.log('head', head)
+    console.log('reversedList', reversedList)
+
+    const answer = mergeTwoLists(head, reversedList, listLength)
+    console.log('answer', answer)
+    return answer
+};
+
+var getReverseListAndLength = function(head) {
+
+    let [prev, curr, temp] = [null, head, null]
+
+    let count = 0
+
+    while (curr !== null) {
+        temp = curr.next
+        curr.next = prev
+        prev = curr
+        curr = temp
+
+        count++
+    }
+
+    return [prev, count]
+}
+
+var mergeTwoLists = function(l1, l2, listLength) {
+
+    console.log('l1', l1.next)
+
+    let l3 = new ListNode(l1.val)
+
+    let pointer1 = l1.next
+    let pointer2 = l2
+    let pointer3 = l3
+
+    console.log('pointers 1,2,3', pointer1, pointer2, pointer3)
+
+    let count = 1
+    let alternator = false
+
+    while (count < listLength) {
+        if (alternator) { // add from l1
+            pointer3.next = new ListNode(pointer1?.val)
+            pointer3 = pointer3.next
+            pointer1 = pointer1?.next
+            alternator = false
+        } else { // add from l2
+            pointer3.next = new ListNode(pointer2?.val)
+            pointer3 = pointer3.next
+            pointer2 = pointer2?.next
+            alternator = true
+        }
+        count++
+    }
+
+    return l3
+
+    // declarations
+        // counter
+        // l3 -- as new instance of node class
+        // pointers
+    // we need the length of the list
+    // while loop where we take turns adding to l3 from l1 and l2 -- until counter has reached length
 }
