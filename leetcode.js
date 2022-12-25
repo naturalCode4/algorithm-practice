@@ -1940,3 +1940,121 @@ var mergeTwoLists = function(l1, l2, listLength) {
     // we need the length of the list
     // while loop where we take turns adding to l3 from l1 and l2 -- until counter has reached length
 }
+
+// * Definition for singly-linked list.
+function ListNode(val, next) {
+     this.val = (val===undefined ? 0 : val)
+     this.next = (next===undefined ? null : next)
+}
+/*
+/*
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+*/
+
+// METHOD 2. Has O(3n) time compared to Method 1 which has O(2n) time. Both are technically O(n) time complexity
+// reverse the list
+// remove from the front, using a counter
+// reverse it again to get the proper order
+
+var removeNthFromEnd = function(head, n) {
+    const reversed = reverseList(head)
+    console.log('reversed', reversed)
+    return reverseList(removeNthFromFront(reversed, n))
+};
+
+var reverseList = function(head) {
+
+    let [prev, curr, temp] = [null, head, null]
+
+    while (curr) {
+        temp = curr.next
+        curr.next = prev
+        prev = curr
+        curr = temp
+    }
+
+    return prev
+
+    // declare previous, current, and a next variable
+
+    // while
+        // store our temp
+        // set the new next to the previous
+
+        // move our pointers
+            // move prev, current
+}
+
+// METHOD 1
+// traverse the list find number of nodes, and determine which node is nth node from last
+// traverse list again, knowing which one is node, and remove it
+
+/*
+var removeNthFromEnd = function(head, n) {
+    const positionFromStart = getListLength(head) - n + 1
+    return removeNthFromStart(head, positionFromStart)
+}
+
+var getListLength = function(head) {
+   let curr = head
+   let length = 0
+
+   while (curr) {
+       length++
+       curr = curr.next
+   }
+
+   return length
+}
+
+var removeNthFromStart = function(head, n) {
+    
+    let dummy = new ListNode(null, head)
+    let prev = dummy
+    let curr = prev.next
+
+    let counter = 1
+
+    while (curr) {
+        if (counter === n) {
+            prev.next = curr.next
+            break
+        }
+        prev = curr
+        curr = curr.next
+        counter++
+    }
+
+    return dummy.next
+}
+
+var removeNthFromFront = function(head, n) {
+
+    console.log('head0', head)
+
+    let counter = 1
+    let prev = new ListNode(-1, head)
+    let curr = prev.next
+
+    // if (curr) head = curr
+
+    while (curr) {
+        console.log('prev', prev, 'curr', curr)
+        if (counter === n) {
+            if (n === 1) {
+                console.log('curr', curr)
+                head = curr.next
+            }
+            prev.next = curr.next
+            break
+        }
+        counter++
+        prev = curr
+        curr = curr.next
+    }
+    console.log('head2', head)
+    return head
+}
+*/
