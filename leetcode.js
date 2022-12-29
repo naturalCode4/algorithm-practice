@@ -2058,3 +2058,132 @@ var removeNthFromFront = function(head, n) {
     return head
 }
 */
+
+// 238. Product of Array Except Self in O(n) time complexity!
+
+var productOfArrayExceptSelf = function(nums) {
+    
+    let prefix = []
+    let postfix = []
+    let answer = new Array(nums.length).fill(1)
+
+    let prefixVal = 1
+    let postfixVal = 1
+
+    // create prefix 
+    for (let i=0; i<nums.length; i++) {
+        prefixVal *= nums[i]
+        prefix[i] = prefixVal
+    }
+
+    for (let i=nums.length-1; i>=0; i--) {
+        postfixVal *= nums[i]
+        postfix[i] = postfixVal
+    }
+
+    //each numbers is going to be prefix before and postfix after
+    for (let i=0; i<nums.length; i++) {
+        answer[i] *= prefix[i-1] !== undefined ? prefix[i-1] : 1
+        answer[i] *= postfix[i+1] !== undefined ? postfix[i+1] : 1
+    }
+
+    console.log('prefix', prefix)
+    console.log('postfix', postfix)
+    console.log('answer', answer)
+
+    return answer
+};
+
+//create prefix and postfix array
+//each element in result = prefix[i-1] * postfix[i+1]
+
+// nums: [n1, n2, n3, n4]
+// prefix: [n1, n1*n2, n1*n2*n3, n1*n2*n3*n4]
+// postfix: [n4*n3*n2*n1,n4*n3*n2, n4*n3, n4]
+
+//226. Invert Binary Tree
+var invertTree = function(root) {
+    
+    // base case
+    if (!root) return null
+
+    let tempRight = root.right
+
+    root.right = root.left
+    root.left = tempRight
+
+    invertTree(root.right)
+    invertTree(root.left)
+
+    return root
+
+};
+
+// 104. Maxiumu depth of binary tree -- 3 methods. Depth First Search and Breadth First Search
+
+// /**
+//  * Definition for a binary tree node.
+//  * function TreeNode(val, left, right) {
+//  *     this.val = (val===undefined ? 0 : val)
+//  *     this.left = (left===undefined ? null : left)
+//  *     this.right = (right===undefined ? null : right)
+//  * }
+//  */
+// /**
+//  * @param {TreeNode} root
+//  * @return {number}
+//  */
+
+// dfs recursive
+var maxDepth = function(root) {
+    // base case
+    if (!root) return 0
+    // recursive case
+    return 1 + Math.max(maxDepth(root?.left), maxDepth(root?.right))
+};
+
+// // bfs
+// var maxDepth = function(root) {
+
+//     let queue = [root]
+//     let level = 0
+
+//     while (queue[0]) {
+//         level += 1
+//         console.log('hit')
+//         for (let i=0; i<queue.length; i++) {
+//             console.log(queue, 'level: ', level)
+//             let topElement = queue.pop()
+//             if (topElement.left) {
+//                 queue.push(topElement.left)
+//             }
+//             if (topElement.right) {
+//                 queue.push(topElement.right)
+//             }
+//         }
+//     }
+
+//     return level
+// }
+
+// // dfs iterative (without recursion)
+// // var maxDepth = function(root) {
+
+// //     if (!root) return 0
+
+// //     let queue = [[root, 1]]
+// //     let depth = 1
+
+// //     while (queue[0]) {
+// //         let [node, level] = queue.pop()
+// //         depth = Math.max(depth, level)
+// //         if (node?.left) {
+// //             queue.push([node.left, level + 1])
+// //         }
+// //         if (node?.right) {
+// //             queue.push([node.right, level + 1])
+// //         }
+// //     }
+
+// //     return depth
+// // }
