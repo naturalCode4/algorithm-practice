@@ -2187,3 +2187,65 @@ var maxDepth = function(root) {
 
 // //     return depth
 // // }
+
+// Change all values to depth in tree
+var changeNodeValuesToDepth = function(root) {
+
+    if (root === null) return root
+
+    let queue = [root]
+    let level = 0
+
+    while (queue[0]) {
+        console.log('hit1')
+        level+=1
+        const queueLength = queue.length
+        for (let i=0; i<queueLength; i++) {
+            console.log('hit2')
+            let node = queue.pop()
+            node.val = level
+            if (node?.left) {
+                queue.push(node.left)
+            }
+            if (node?.right) {
+                queue.push(node.right)
+            }
+            console.log(root, queue)
+        }
+    }
+
+    console.log('hit3', root)
+    return root
+}
+
+// change all values to height
+var changeNodeValuesToHeight = function(root) {
+
+    if (root === null) return root
+
+    let depth = findDepthOfTree(root)
+
+    let queue = [root]
+
+    while (queue[0]) {
+        let lengthOfQueue = queue.length
+        for (let i=0; i<lengthOfQueue; i++) {
+            let firstNode = queue.shift()
+            firstNode.val = depth
+            if (firstNode?.left) queue.push(firstNode.left)
+            if (firstNode?.right) queue.push(firstNode.right)
+        }
+        depth -= 1
+    }
+
+    console.log(root)
+}
+
+// Helper for changeNodeValuesToHeight
+var findDepthOfTree = function(root) {
+    if (root === null) {
+        return 0
+    }
+
+    return 1 + Math.max(findDepthOfTree(root?.left), findDepthOfTree(root?.right))
+}
