@@ -2136,10 +2136,8 @@ var invertTree = function(root) {
 
 // dfs recursive
 var maxDepth = function(root) {
-    // base case
-    if (!root) return 0
-    // recursive case
-    return 1 + Math.max(maxDepth(root?.left), maxDepth(root?.right))
+    if (!root) return 0    // base case
+    return 1 + Math.max(maxDepth(root?.left), maxDepth(root?.right)) // recursive case
 };
 
 // // bfs
@@ -2249,3 +2247,68 @@ var findDepthOfTree = function(root) {
 
     return 1 + Math.max(findDepthOfTree(root?.left), findDepthOfTree(root?.right))
 }
+
+// Leetcode problem 695 -- Max Area of Island
+
+var maxAreaOfIsland = function(grid) {
+
+    var bfs = function(r, c) {
+
+        var executeFourDirections = function(r, c) { // ==> [1, 0]
+            directions.forEach(direction => {
+                const [dr, dc] = [direction[0], direction[1]]
+                const [_r, _c] = [r + dr, c + dc]
+                if (isUnvisitedLand(_r, _c)) {
+                    queue.push([_r, _c])
+                    visited.add(coordinateConverted(_r,_c))
+                }
+            })
+        }
+
+        var isUnvisitedLand = function (r, c) {
+            return grid[r] && grid[r][c] && !visited.has(coordinateConverted(r, c)) 
+            // implicitly tells us that its a 1 (isUnvisitedLand)
+        }
+
+        let size = 0
+        let queue = [[r, c]]
+        visited.add(coordinateConverted(r,c))
+
+        while (queue[0]) {
+            let point = queue.shift()
+            size++
+            executeFourDirections(point[0], point[1])
+        }
+
+        maxSize = Math.max(maxSize, size)
+
+    }
+
+    var coordinateConverted = function(r, c) {
+        return `${r}-${c}`
+    }
+
+    let visited = new Set() // ==> ['r1-c1', ... 'rn-cn']
+    let maxSize = 0
+    const directions = [[1,0], [-1, 0], [0,1], [0, -1]]
+
+    for (let r=0; r<grid.length; r++) {
+        for (let c=0; c<grid[0].length; c++) {
+            if (grid[r][c] === 1 && !visited.has(coordinateConverted(r,c))) { // not yet visited and a 1
+                bfs(r, c)
+            }
+        }
+    }
+
+    return maxSize
+
+}
+
+// track visitedCells, islandSize, maxIslandSize, Stack/Queue
+// double for loop traversing every element
+    // For cells we have not visited yet and are land (1s)
+        // bfs/dfs
+            // look at the four directions
+                // for that we need directionsPointer = [[1,0], [-1, 0], [0,1], [0, -1]]
+                // And check each of those points for more land, and if they have land, add to the queue/stack
+// return maxIslandSize which has starting value of 0
