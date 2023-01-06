@@ -2312,3 +2312,190 @@ var maxAreaOfIsland = function(grid) {
                 // for that we need directionsPointer = [[1,0], [-1, 0], [0,1], [0, -1]]
                 // And check each of those points for more land, and if they have land, add to the queue/stack
 // return maxIslandSize which has starting value of 0
+
+
+//rotting oranges problem leetcode # 994
+const orangesRotting = function(grid) {
+
+    const [ROWS, COLS] = [grid.length, grid[0].length]
+    let minutes = 0
+    let freshOranges = 0
+    let rottenOranges = 0
+    let initialRotted = []
+    let queue = []
+    const directions = [[0, 1], [0, -1], [-1, 0], [1, 0]]
+
+    const bfs = function(queue) {
+
+        const fermentLayer = function(layer) {
+            let nextLayer = []
+            layer.forEach(rottenOrange => {
+                directions.forEach(dir => {
+                    const [_r, _c] = [rottenOrange[0] + dir[0], rottenOrange[1] + dir[1]]
+                    const isFreshOrange = grid[_r] && grid[_r][_c] && grid[_r][_c] === 1
+                    if (isFreshOrange) {
+                        grid[_r][_c] = 2
+                        rottenOranges += 1
+                        freshOranges -= 1
+                        nextLayer.push([_r, _c])
+                    }
+                })
+            })
+            queue.unshift(nextLayer)
+        }
+        while (freshOranges > 0 && queue[0][0]) {
+            layer = queue.pop()
+            fermentLayer(layer)
+            minutes += 1
+        }
+    }
+
+    for (let r=0; r<ROWS; r++) {
+        for (let c=0; c<COLS; c++) {
+            let foundRotted = []
+            if (grid[r][c] === 2) {
+                initialRotted.push([r,c])
+                rottenOranges += 1
+            } else if (grid[r][c] === 1) {
+                freshOranges += 1
+            }
+        }
+    }
+
+    if (freshOranges === 0) return 0
+
+    queue.unshift(initialRotted)
+
+    bfs(queue)
+
+    return freshOranges !== 0 ? -1 : minutes
+};
+
+// Count number of rotten and fresh oranges. (Can we combine this iteration throug everything for efficiency)
+// bfs, counting minutes, changing 4-dir to rotten, marking all different states of oranges (2 of following: total, rotten, fresh)
+// if total oranges is different than the number of rotten oranges at the end, return -1 because impossible
+
+
+// if at any two iterations, the number of fresh oranges has not changed, then we know, we have either reached all of them, or there is a cell that cannot be rotted (because its an island)
+    //we know we're done because we are tracking total rotted and total oranges, and when they're equal, we have rotted them all
+    // two same iterations in a row where we havent rotted them all, tells us that there is an island
+    // ==> if two iterations have same amount of oranges,
+        // ==> if number of rotten !== total, then return -1 because can't rot them all.
+
+
+// number of islands in graph
+var numIslands = function(grid) {
+
+    const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+
+    var isUnvisitedLand = function(r, c, grid, visited) {
+        return grid[r][c] === '1' && visited[r][c] === 'O' ? true : false
+    }
+
+    var bfs = function(r, c, grid, visited) {
+
+        var searchFourDirections = function (r, c, grid, queue, visited) {
+            console.log('hit four directions', r, c)
+            directions.forEach(direction => {
+                const [_r, _c] = [r + direction[0], c + direction[1]]
+                if (grid[_r] && grid[_r][_c]) {
+                    if (isUnvisitedLand(_r, _c, grid, visited)) {
+                        queue.push([_r, _c])
+                    }
+                    visited[_r][_c] = 'X'
+                }
+            })
+        }
+
+        let queue = [[r, c]]
+        visited[r][c] = 'X'
+
+        while (queue[0]) {
+            const curr = queue.shift()
+            const [currR, currC] = [curr[0], curr[1]]
+            visited[currR][currC] = 'X'
+            searchFourDirections(currR, currC, grid, queue, visited)
+        }
+    }
+
+    const [ROWS, COLS] = [grid.length, grid[0].length]
+    let visited = new Array(ROWS).fill().map(() => new Array(COLS).fill('O'));
+    let numberOfIslands = 0
+
+    for (let r=0; r<ROWS; r++) {
+        for (let c=0; c<COLS; c++) {
+            if (isUnvisitedLand(r, c, grid, visited)) {
+                numberOfIslands += 1
+                bfs(r, c, grid, visited)
+            } 
+        }
+    }
+
+    return numberOfIslands
+};
+
+// Find busiest mall time -- Pramp
+
+// The Westfield Mall management is trying to figure out what the busiest moment at the mall was last year. You’re given data extracted from the mall’s door detectors. Each data point is represented as an integer array whose size is 3. The values at indices 0, 1 and 2 are the timestamp, the count of visitors, and whether the visitors entered or exited the mall (0 for exit and 1 for entrance), respectively. Here’s an example of a data point: [ 1440084737, 4, 0 ].
+
+// Note that time is given in a Unix format called Epoch, which is a nonnegative integer holding the number of seconds that have elapsed since 00:00:00 UTC, Thursday, 1 January 1970.
+
+// Given an array, data, of data points, write a function findBusiestPeriod that returns the time at which the mall reached its busiest moment last year. The return value is the timestamp, e.g. 1480640292. Note that if there is more than one period with the same visitor peak, return the earliest one.
+
+// Assume that the array data is sorted in an ascending order by the timestamp. Explain your solution and analyze its time and space complexities.
+
+data = [ [1487799425, 14, 1], 
+[1487799425, 4,  0],
+[1487799425, 2,  0],
+[1487800378, 10, 1],
+[1487801478, 18, 0],
+[1487801478, 18, 1],
+[1487901013, 1,  0],
+[1487901211, 7,  1],
+[1487901211, 7,  0] ]
+
+function findBusiestPeriod(data) {
+
+let max = [null, 0]
+let tempTotal = 0
+
+let compiledData = {}
+
+data.forEach(point => {
+console.log('hit', compiledData[point[1]])
+if (!compiledData[point[0]]) {
+compiledData[point[0]] = point[2] === 1 ? point[1] : -point[1]
+} else {
+compiledData[point[0]] += point[2] === 1 ? point[1] : -point[1]
+}
+})
+
+console.log(compiledData)
+
+Object.keys(compiledData).map(e => {
+tempTotal += compiledData[e]
+if (tempTotal >= max[1]) {
+max = [e, tempTotal]
+}
+});
+
+return max[0]
+
+}
+
+console.log(findBusiestPeriod(data))
+
+// Smallest sum on node path
+
+function getCheapestCost(rootNode) { 
+
+    function Node(cost) {
+        this.cost = cost;
+        this.children = [];
+    }   
+    //base case
+    if (!rootNode.children[0]) return rootNode.cost
+    
+    //recursive case
+    return rootNode.cost + Math.min(...rootNode.children.map(child => getCheapestCost(child)))
+}
