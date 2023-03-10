@@ -2499,3 +2499,33 @@ function getCheapestCost(rootNode) {
     //recursive case
     return rootNode.cost + Math.min(...rootNode.children.map(child => getCheapestCost(child)))
 }
+
+// Given you have an array of integers and a target value, determine if any two numbers multiply to the target
+
+// Method
+// Create hash of the array values of form {val: index}
+// Iterate the array and see if the key exists in the hash such that the array value * hash value = target
+
+const twoProduct = (array, target) => {
+
+    const getDesiredMultiplicandHashValue = (val, target) => target / val
+
+    let hash = {}
+
+    for (let i=0; i<array.length; i++) {
+        hash[array[i]] = i
+        const currentHashKey = getDesiredMultiplicandHashValue(array[i], target)
+        if (hash[currentHashKey] !== undefined && hash[currentHashKey] !== i) {return true}
+    }
+
+    return false
+
+}
+
+// Time complexity O(n). Specifically, 2n
+
+console.log('target: 1', twoProduct([1,2,4,6], 1))
+console.log('target: 2', twoProduct([1,2,4,6], 2))
+console.log('target: 8', twoProduct([1,2,4,6], 8))
+console.log('target: 22', twoProduct([1,2,4,6], 22))
+console.log('target: -8', twoProduct([1,2,4,6], -8))
